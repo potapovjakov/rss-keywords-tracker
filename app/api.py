@@ -13,10 +13,8 @@ from app.crud import (
 )
 from app.scanner import scan_rss_feeds
 
-# Создание роутера для API
 router = APIRouter()
 
-# Маршруты для RSS источников
 @router.get("/sources", response_model=List[RSSSourceResponse])
 def read_sources(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     sources = get_rss_sources(db, skip=skip, limit=limit)
@@ -40,7 +38,6 @@ def delete_source(source_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="RSS source not found")
     return {"detail": "RSS source deleted"}
 
-# Маршруты для ключевых слов
 @router.get("/keywords", response_model=List[KeywordResponse])
 def read_keywords(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     keywords = get_keywords(db, skip=skip, limit=limit)
@@ -64,23 +61,17 @@ def delete_keyword_route(keyword_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Keyword not found")
     return {"detail": "Keyword deleted"}
 
-# Маршруты для новостей
 @router.get("/news", response_model=List[NewsResponse])
 def read_news(skip: int = 0, limit: int = 20, keyword_id: Optional[int] = None, db: Session = Depends(get_db)):
-    # Получаем новости из базы данных
     news_items = get_news(db, skip=skip, limit=limit, keyword_id=keyword_id)
 
-    # Подготавливаем список для ответа API
     response_items = []
 
     for news in news_items:
-        # Для каждой новости извлекаем ID ключевых слов из связи NewsKeyword
         keyword_ids = [nk.keyword_id for nk in news.keywords]
 
-        # Получаем объекты Keyword по ID
         keywords = [get_keyword_by_id(db, kid) for kid in keyword_ids if kid is not None]
 
-        # Создаем объект ответа
         news_dict = {
             "id": news.id,
             "title": news.title,
@@ -94,10 +85,8 @@ def read_news(skip: int = 0, limit: int = 20, keyword_id: Optional[int] = None, 
 
         response_items.append(news_dict)
 
-    # Используем Pydantic для преобразования в формат ответа
     return parse_obj_as(List[NewsResponse], response_items)
 
-# Маршрут для ручного запуска сканирования
 @router.post("/scan")
 def run_scan(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     logger.info("Запущено ручное сканирование RSS-лент")
