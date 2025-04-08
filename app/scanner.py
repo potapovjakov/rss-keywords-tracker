@@ -25,13 +25,9 @@ def scan_rss_feeds(db: Session):
 
     for source in sources:
         try:
-            logger.info(f"Сканирование источника: {source.name} ({source.url})")
             feed = feedparser.parse(source.url)
-
             if hasattr(feed, 'bozo_exception'):
                 logger.warning(f"Проблема с парсингом RSS {source.url}: {feed.bozo_exception}")
-
-            logger.info(f"Найдено {len(feed.entries)} записей в ленте {source.name}")
 
             for entry in feed.entries:
                 existing_news = get_news_by_url(db, entry.link)
@@ -74,7 +70,10 @@ def scan_rss_feeds(db: Session):
         except Exception as e:
             logger.error(f"Ошибка при сканировании {source.url}: {str(e)}", exc_info=True)
 
-    logger.info(f"Сканирование RSS лент завершено в {datetime.now()}")
+    logger.info(
+        f"Сканирование {len(sources)} RSS лент по {len(keywords)} ключевым "
+        f"словам завершено в {datetime.now()}"
+    )
 
 def start_rss_scanner():
     """
