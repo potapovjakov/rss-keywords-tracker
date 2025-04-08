@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "06a1db89-fb9c-40f9-9bbb-7a749c7bfe46",
+		"name": "RSS Keywords Tracker API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "19884282"
+	},
+	"item": [
+		{
+			"name": "RSS Sources",
+			"item": [
+				{
+					"name": "Get RSS Sources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/sources"
+					},
+					"response": []
+				},
+				{
+					"name": "Create RSS Source",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"url\": \"https://lenta.ru/rss/news\",\n    \"name\": \"Лента\"\n}"
+						},
+						"url": "{{baseUrl}}/sources"
+					},
+					"response": []
+				},
+				{
+					"name": "Get RSS Source by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/sources/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete RSS Source by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/sources/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Keywords",
+			"item": [
+				{
+					"name": "Get Keywords",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/keywords?skip=0&limit=100",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"keywords"
+							],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Keyword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"word\": \"трамп\"\n}"
+						},
+						"url": "{{baseUrl}}/keywords"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Keyword by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/keywords/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Keyword by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/keywords/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "News",
+			"item": [
+				{
+					"name": "Get News",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/news?skip=0&limit=50",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"news"
+							],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000"
+		}
+	]
+}
